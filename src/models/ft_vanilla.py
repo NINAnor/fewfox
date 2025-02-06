@@ -14,8 +14,8 @@ class TransferLearningModel(pl.LightningModule):
         lr: float = 1e-3,
         lr_scheduler_gamma: float = 1e-1,
         num_workers: int = 6,
-        ft_entire_network: bool = False,  # Should all the layers be trained
-        embedding_dim: int = 512,  # Dimension of embeddings from feature extractor
+        ft_entire_network: bool = False,  # should all the layers be trained?
+        embedding_dim: int = 512,  
         **kwargs,
     ) -> None:
         super().__init__()
@@ -30,7 +30,7 @@ class TransferLearningModel(pl.LightningModule):
 
         # Assign the feature extractor
         self.feature_extractor = feature_extractor
-        self.feature_extractor.eval()  # Ensure feature extractor is in eval mode
+        self.feature_extractor.eval()  
 
         # Classifier head
         self.fc = nn.Linear(self.embedding_dim, self.num_target_classes)

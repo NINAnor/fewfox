@@ -2,3 +2,8 @@ ROOT_PATH: /home/benjamin.cretois/data/esc50/
 AUDIO_DIR_ESC50: /home/benjamin.cretois/data/esc50/ESC-50-master/audio/
 CSV_FILE_ESC50: /home/benjamin.cretois/data/esc50/ESC-50-master/meta/esc50.csv
 MINI_ESC50_PATH: /home/benjamin.cretois/data/esc50/miniESC50/
+
+
+
+
+MODEL_PATH: /home/benjamin.cretois/Code/fewfox/lightning_logs/version_1/checkpoints/epoch=9-step=500.ckpt

@@ -1,0 +1,11 @@
+__pycache__
+*.egg-info
+
+.pytest_cache
+*.pyc
+.ctt
+
+*.ipynb
+lightning_logs/
+outputs/
+.venv/

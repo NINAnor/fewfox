@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from sklearn.manifold import TSNE
 
-from datamodules.mini_esc50 import miniECS50DataModule
+from datamodules.esc50.mini_esc50 import miniECS50DataModule
 from easyfsl.methods import PrototypicalNetworks
 from torchvision.models import resnet50, ResNet50_Weights
 import torch

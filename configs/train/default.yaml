@@ -1,2 +1,7 @@
 BATCH_SIZE: 8 
 SPLIT_RATIO: 0.8
+
+DATALOADER: "bacpipe" # bacpipe or classic
+N_TASK_TRAIN: 100
+N_TASK_VAL: 20
+N_TASK_TEST: 10
