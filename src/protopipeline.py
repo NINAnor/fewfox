@@ -39,27 +39,30 @@ def main(cfg):
 
     elif cfg.train.DATALOADER == "bacpipe":
 
-        # Generate the embeddings
+        # Generate the embeddings (they will be saved in a folder)
         print("[INFO] GENERATING THE TRAINING EMBEDDINGS")
-        loader, train_embeddings = get_embeddings("birdnet", root_dir / "audio/train", check_if_primary_combination_exists=False)
+        loader, _ = get_embeddings("birdnet", root_dir / "audio/train", check_if_primary_combination_exists=True)
+        train_embed_dir = loader.embed_dir
 
         print("[INFO] GENERATING THE VALIDATION EMBEDDINGS")
-        loader, val_embeddings = get_embeddings("birdnet", root_dir / "audio/val", check_if_primary_combination_exists=False)
+        loader, _ = get_embeddings("birdnet", root_dir / "audio/val", check_if_primary_combination_exists=True)
+        val_embed_dir = loader.embed_dir
 
         print("[INFO] GENERATING THE TEST EMBEDDINGS")
-        loader, test_embeddings = get_embeddings("birdnet", root_dir / "audio/test", check_if_primary_combination_exists=False)
+        loader, _ = get_embeddings("birdnet", root_dir / "audio/test", check_if_primary_combination_exists=True)
+        test_embed_dir = loader.embed_dir
 
         print("[INFO] CREATING THE DATALOADER")
         data_module = EmbeddingsMiniESC50DataModule(
-            embeddings_train= train_embeddings,
-            embeddings_val= val_embeddings,
-            embeddings_test= test_embeddings,
-            csv_file_train = root_dir / "meta/esc50mini_train.csv",
-            csv_file_val = root_dir / "meta/esc50mini_val.csv",
-            csv_file_test = root_dir / "meta/esc50mini_test.csv",
-            n_task_train = 50,
-            n_task_val = 10,
-            n_task_test = 10
+            embed_dir_train = str(train_embed_dir),
+            embed_dir_val   = str(val_embed_dir),
+            embed_dir_test  = str(test_embed_dir),
+            csv_file_train  = str(root_dir / "meta/esc50mini_train.csv"),
+            csv_file_val    = str(root_dir / "meta/esc50mini_val.csv"),
+            csv_file_test   = str(root_dir / "meta/esc50mini_test.csv"),
+            n_task_train    = 50,
+            n_task_val      = 10,
+            n_task_test     = 10
         )
 
     ######################################
