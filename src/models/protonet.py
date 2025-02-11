@@ -40,10 +40,6 @@ class ProtoNetworkModel(pl.LightningModule):
         # Build the prototypical network with the provided backbone.
         self.model = PrototypicalNetworks(self.backbone_model)
         
-        # If not fine-tuning the entire network, add an FC layer to adapt the embeddings.
-        if not self.ft_entire_network:
-            self.fc = nn.Linear(self.embedding_dim, self.projection_dim)
-        
         self.save_hyperparameters(ignore=['backbone_model'])
         
         self.train_acc = Accuracy(task="multiclass", num_classes=self.n_way)
@@ -52,12 +48,6 @@ class ProtoNetworkModel(pl.LightningModule):
         self.valid_f1 = F1Score(task="multiclass", num_classes=self.n_way)
 
     def forward(self, support_images, support_labels, query_images):
-        # When using precomputed embeddings and not fine-tuning the entire network,
-        # pass the embeddings through the FC layer.
-        if not self.ft_entire_network and hasattr(self, 'fc'):
-            support_images = self.fc(support_images)
-            query_images = self.fc(query_images)
-            
         self.model.process_support_set(support_images, support_labels)
         classification_scores = self.model(query_images)
         return classification_scores
@@ -85,19 +75,10 @@ class ProtoNetworkModel(pl.LightningModule):
         self.log("valid_f1", self.valid_f1(predicted_labels, query_labels), prog_bar=True)
 
     def configure_optimizers(self):
-        if self.ft_entire_network:
-            optimizer = optim.AdamW(
-                self.model.parameters(), 
-                lr=self.lr, 
-                betas=(0.9, 0.98), 
-                weight_decay=0.01
-            )
-        else:
-            # When not fine-tuning the entire network, optimize only the FC layer.
-            optimizer = optim.AdamW(
-                self.fc.parameters(), 
-                lr=self.lr, 
-                betas=(0.9, 0.98), 
-                weight_decay=0.01
-            )
+        optimizer = optim.AdamW(
+            self.model.parameters(), 
+            lr=self.lr, 
+            betas=(0.9, 0.98), 
+            weight_decay=0.01
+        )
         return optimizer

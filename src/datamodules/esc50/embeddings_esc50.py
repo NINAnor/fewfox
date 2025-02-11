@@ -47,10 +47,10 @@ class EmbeddingFileDataset(Dataset):
 
         # ECS50 is composed of recordings of 6 seconds. Using BirdNET, bacpipe will create arrays of (2x1024),
         # need to aggregate them
-        if X.shape[0] > 1:
-            X = np.mean(X, axis=0)
+        if embedding.shape[0] > 1:
+            embedding = np.mean(embedding, axis=0)
         else:
-            X = X.flatten()
+            embedding = embedding.flatten()
 
 
         embedding = torch.tensor(embedding, dtype=torch.float32)

@@ -1,5 +1,3 @@
-from easyfsl.samplers import TaskSampler
-from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 import pathlib
 import os
@@ -13,6 +11,22 @@ from models.protonet import ProtoNetworkModel
 import hydra
 
 from bacpipe.main import get_embeddings
+
+
+class SimpleNN(nn.Module):
+    def __init__(
+            self,
+            in_dim = 1024,
+            out_dim = 1024):
+        super().__init__()
+        self.in_dim = in_dim
+        self.out_dim = out_dim
+        self.layers = nn.Sequential(
+            nn.Linear(in_features=in_dim, out_features=out_dim),
+        )
+    def forward(self, x):
+        x = self.layers(x)
+        return x
 
 class Identity(nn.Module):
     def forward(self, x):
@@ -41,15 +55,15 @@ def main(cfg):
 
         # Generate the embeddings (they will be saved in a folder)
         print("[INFO] GENERATING THE TRAINING EMBEDDINGS")
-        loader, _ = get_embeddings("birdnet", root_dir / "audio/train", check_if_primary_combination_exists=True)
+        loader = get_embeddings("birdnet", root_dir / "audio/train", check_if_primary_combination_exists=True)
         train_embed_dir = loader.embed_dir
 
         print("[INFO] GENERATING THE VALIDATION EMBEDDINGS")
-        loader, _ = get_embeddings("birdnet", root_dir / "audio/val", check_if_primary_combination_exists=True)
+        loader = get_embeddings("birdnet", root_dir / "audio/val", check_if_primary_combination_exists=True)
         val_embed_dir = loader.embed_dir
 
         print("[INFO] GENERATING THE TEST EMBEDDINGS")
-        loader, _ = get_embeddings("birdnet", root_dir / "audio/test", check_if_primary_combination_exists=True)
+        loader = get_embeddings("birdnet", root_dir / "audio/test", check_if_primary_combination_exists=True)
         test_embed_dir = loader.embed_dir
 
         print("[INFO] CREATING THE DATALOADER")
@@ -78,7 +92,7 @@ def main(cfg):
         ft_entire_network = True
     else:
         # Use an identity module to pass through the precomputed embeddings.
-        backbone = Identity()
+        backbone = SimpleNN()
         ft_entire_network = False
 
     protonetwork = ProtoNetworkModel(backbone_model=backbone, 
