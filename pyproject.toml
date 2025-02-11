@@ -20,6 +20,15 @@ resampy = "^0.4.3"
 seaborn = "^0.13.2"
 keras = "<3.0.0"
 tensorflow = "2.15.1"
+ml-collections = "^1.0.0"
+apache-beam = "^2.62.0"
+ml-dtypes = "0.3.2"
+jax = "0.4.33"
+etils = "1.9.4"
+importlib-resources = "6.4.5"
+flax = "0.10.0"
+tensorflow-hub = "0.16.1"
+torchaudio = "2.4.1"
 
 
 [tool.poetry.group.dev.dependencies]
