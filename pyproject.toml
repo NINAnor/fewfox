@@ -29,6 +29,7 @@ importlib-resources = "6.4.5"
 flax = "0.10.0"
 tensorflow-hub = "0.16.1"
 torchaudio = "2.4.1"
+marimo = "^0.11.2"
 
 
 [tool.poetry.group.dev.dependencies]
